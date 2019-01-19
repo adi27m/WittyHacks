@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Hackalogist</title>
+</head>
+<body>
+	<a href="home">Click</a>
+	<script type="text/javascript">
+		var websocket = new WebSocket("ws://localhost:8080/hackalogist/ServerEndPoint");
+		websocket.onmessage = function processMessage(message) {
+			var jsonData=JSON.parse(message.data);
+			console.log(jsonData);
+		}
+	</script>
+</body>
+</html>
