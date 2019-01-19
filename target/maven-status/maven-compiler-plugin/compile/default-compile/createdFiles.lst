@@ -1,4 +1,8 @@
-com/hackalogist/controller/HomeController.class
-com/hackalogist/model/MessageModel.class
-com/hackalogist/notifier/ServerEndPoint.class
+com/hackalogist/enums/CommandNames.class
+com/hackalogist/service/GameManagementService.class
+com/hackalogist/commons/Constants.class
 com/hackalogist/model/GameSession.class
+com/hackalogist/dao/GameManagementDao.class
+com/hackalogist/service/GameManagementService$1.class
+com/hackalogist/notifier/ServerEndPoint.class
+com/hackalogist/controller/GameManagementController.class

@@ -1,4 +1,7 @@
 /Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/notifier/ServerEndPoint.java
-/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/model/MessageModel.java
-/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/controller/HomeController.java
 /Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/model/GameSession.java
+/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/commons/Constants.java
+/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/dao/GameManagementDao.java
+/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/enums/CommandNames.java
+/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/controller/GameManagementController.java
+/Users/mayank/Desktop/WittyHacks/src/main/java/com/hackalogist/service/GameManagementService.java

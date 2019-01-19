@@ -20,16 +20,16 @@ public class GameManagementService {
 		
 	}
 
-		public void executeOperation(Map<String, String> map, String userId) {
-			String commandNameString = map.get(Constants.COMMAND_NAME);
+		public void executeOperation(Map<String, Object> map, String userId) {
+			String commandNameString = (String)map.get(Constants.COMMAND_NAME);
 			if(null != commandNameString) {
 				CommandNames commandName = CommandNames.valueOf(commandNameString);
 				switch(commandName) {
 				case STARTGAME:
-					//gameManagementDao.startGame(map,userId);
+					gameManagementDao.startGame(map,userId);
 					break;
 				case CHECKRESPONSE:
-					//gameManagementDao.checkResponse(map,userId);
+					gameManagementDao.checkResponse(map,userId);
 					break;
 				case PREPAREGAME:
 					gameManagementDao.prepareGame(map,userId);
