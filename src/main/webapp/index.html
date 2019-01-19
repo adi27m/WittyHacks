@@ -52,12 +52,12 @@
 
 		websocket.onmessage = function processMessage(message) {
 			var jsonData = JSON.parse(message.data);
-			if (jsonData.COMMAND_NAME === "CURRENT_SESSION_ID") {
-				currentSessionId = jsonData.userid;
-			} else if (jsonData.COMMAND_NAME === "preparegame") {
+			if (jsonData[COMMAND_NAME][0] === "CURRENT_SESSION_ID") {
+				currentSessionId = jsonData.userid[0];
+			} else if (jsonData[COMMAND_NAME] === "preparegame") {
 				gameSessionId = jsonData.gamesessionid;
-				prepareOpponentName(jsonData.opponentname);
-			} else if (jsonData.COMMAND_NAME === "tilepattern") {
+				opponentName = jsonData.opponentname;
+			} else if (jsonData[COMMAND_NAME] === "tilepattern") {
 				tilePattern = jsonData.tilepattern;
 				currentTileNumber = 0;
 				playNext();

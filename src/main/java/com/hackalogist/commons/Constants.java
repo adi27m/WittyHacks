@@ -12,7 +12,7 @@ public class Constants {
 	public static final String ROUND_NUMBER = "roundnumber";
 	public static final String RESULT_PATTERN = "resultpattern";
 	public static final String ATTEMPT = "attempt";
-	public static final Object COMMAND_NAME = "commandname";
+	public static final String COMMAND_NAME = "commandname";
 	
 	
 	

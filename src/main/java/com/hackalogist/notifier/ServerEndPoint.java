@@ -3,6 +3,7 @@ package com.hackalogist.notifier;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,14 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 	public void handleOpen(Session userSession) {
 		System.out.println("INFO: Adding User: " + userSession.toString() + " to the queue at the server.");
 		users.put(userSession.toString(),userSession);
-		//ServerEndPoint.sendResponse(userSession);
+		HashMap< String , List<String>> responseMap=new HashMap<>();
+		List<String> users=new LinkedList<>();
+		users.add(userSession.toString());
+		List<String> commands=new LinkedList<>();
+		commands.add( Constants.CURRENT_SESSION_ID);
+		responseMap.put(Constants.COMMAND_NAME,commands);
+		responseMap.put(Constants.USER_ID, users);
+		ServerEndPoint.sendResponse(userSession.toString(),responseMap);
 		System.out.println("INFO: After Adding number of active users = " + users.size());
 	}
 
