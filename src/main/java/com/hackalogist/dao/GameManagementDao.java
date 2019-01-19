@@ -33,9 +33,6 @@ public class GameManagementDao {
 	
 	public GameSession searchOpponent(String requesterSessionId) {
 		GameSession existingGameSession = null;
-		for (Map.Entry<UUID, GameSession> entry : pendingGameSessions.entrySet()) {
-		    
-		}
 		return null;
 	}
 }

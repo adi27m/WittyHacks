@@ -41,7 +41,7 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 
 	@OnMessage
 	public void handleMessage(String message, Session userSession) {
-		
+		System.out.println(message);
 	}
 	
 	public static void sendSessionIdToUser(Session userSession) {
