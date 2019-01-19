@@ -15,10 +15,6 @@ public class GameManagementService {
 	@Autowired
 	GameManagementDao gameManagementDao;
 	
-	public boolean requestGameSession(String userSessionId, boolean isMultiplayer) {
-		return this.gameManagementDao.requestGameSession(userSessionId, isMultiplayer);
-	}
-	
 		public String requestFileForTile(String userSessionId, String gameSessionId, String tileNumber) {
 		return this.gameManagementDao.requestFileForTile(userSessionId, gameSessionId,tileNumber);
 		
@@ -30,10 +26,10 @@ public class GameManagementService {
 				CommandNames commandName = CommandNames.valueOf(commandNameString);
 				switch(commandName) {
 				case STARTGAME:
-					gameManagementDao.startGame(map,userId);
+					//gameManagementDao.startGame(map,userId);
 					break;
 				case CHECKRESPONSE:
-					gameManagementDao.checkResponse(map,userId);
+					//gameManagementDao.checkResponse(map,userId);
 					break;
 				case PREPAREGAME:
 					gameManagementDao.prepareGame(map,userId);

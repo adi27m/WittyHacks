@@ -22,15 +22,7 @@ public class GameManagementDao {
 	private Map<UUID,GameSession> runningGameSessions = new HashMap<>();
 	GameSession pendingGameSession = null;
 	Map<Integer,String> tileNumberToSoundMapping = null;
-	
-	public GameSession searchOpponent(String requesterSessionId) {
-		GameSession existingGameSession = null;
-		for (Map.Entry<UUID, GameSession> entry : pendingGameSessions.entrySet()) {
-		    
-		}
-		return null;
-	}
-	
+		
 	public boolean checkResponse(String userSessionId,String gameSessionId,String roundNumber,int[] patternOfFile) {
 		GameSession theGameSession = runningGameSessions.get(gameSessionId);
 		return theGameSession.ValidatePattern(patternOfFile);
@@ -55,6 +47,13 @@ public class GameManagementDao {
 				pendingGameSession.setUser2Score(0);
 				pendingGameSession = null;
 				runningGameSessions.put(pendingGameSession.getGameSessionId(), pendingGameSession);
+				HashMap< String , List<String>> responseMap=new HashMap<>();
+				List<String> users=new LinkedList<>();
+				users.add(pendingGameSession.getUser1Id());
+				users.add(pendingGameSession.getUser2Id());
+				responseMap.put(Constants.USER_ID, users);
+				for(String user:users)
+					ServerEndPoint.sendResponse(user, responseMap);
 			}
 			else {
 				GameSession gameSession = new GameSession();
@@ -67,10 +66,9 @@ public class GameManagementDao {
 				HashMap< String , List<String>> responseMap=new HashMap<>();
 				List<String> users=new LinkedList<>();
 				users.add(gameSession.getUser1Id());
-				users.add(gameSession.getUser2Id());
 				responseMap.put(Constants.USER_ID, users);
 				for(String user:users)
-				ServerEndPoint.sendResponse((user, responseMap);
+					ServerEndPoint.sendResponse(user, responseMap);
 			}
 		}
 		else {
@@ -90,6 +88,12 @@ public class GameManagementDao {
 				gameSession.setOpponentName(null);
 				gameSession.setTileToFileSoundMap(createTileNumberToSoundMapping(numberOfTiles));
 				runningGameSessions.put(gameSession.getGameSessionId(), gameSession);
+				HashMap< String , List<String>> responseMap=new HashMap<>();
+				List<String> users=new LinkedList<>();
+				users.add(gameSession.getUser1Id());
+				responseMap.put(Constants.USER_ID, users);
+				for(String user:users)
+					ServerEndPoint.sendResponse(user, responseMap);
 				
 			}
 		}
