@@ -39,6 +39,7 @@
 		const websocket = new WebSocket("ws://localhost:8080/hackalogist/ServerEndPoint");
 		const COMMAND_NAME = "commandname";
 		const NO_OF_TILES = 8;
+		let gameStarted = false;
 		let currentUserName;
 		let opponentName;
 		let currentSessionId;
@@ -47,18 +48,19 @@
 		let otherUserFound = false;
 		let round = 0;
 		let tilePattern = [];
+		let currentTileNumber = null;
 
 		websocket.onmessage = function processMessage(message) {
 			var jsonData = JSON.parse(message.data);
-			if (jsonData.COMMAND_NAME === "currentsessionid") {
+			if (jsonData.COMMAND_NAME === "CURRENT_SESSION_ID") {
 				currentSessionId = jsonData.userid;
 			} else if (jsonData.COMMAND_NAME === "preparegame") {
 				gameSessionId = jsonData.gamesessionid;
-				opponentName = jsonData.opponentname;
-				otherUserFound = true;
+				prepareOpponentName(jsonData.opponentname);
 			} else if (jsonData.COMMAND_NAME === "tilepattern") {
 				tilePattern = jsonData.tilepattern;
-				playThePattern(tilePattern);
+				currentTileNumber = 0;
+				playNext();
 			}
 		}
 
@@ -79,9 +81,9 @@
 			window.setTimeout(function () {
 				if (otherUserFound === true) {
 					alert("Your opponent is " + opponentName);
-					domument.getElementById("Game_Tile").style.display = "block";
+					domument.getElementById("Game_Tile").style.visibility = "visible";
 				} else {
-					//TO DO- open popup error
+					console.log("Error");
 				}
 			}, 10000);
 		}
@@ -98,8 +100,15 @@
 			mapToPrepare[key] = value;
 		}
 
-		function playThePattern() {
+		function playThePattern(tile) {
+			const audio = soundFn(tile);
+			audio.ended = playNext.bind(this);
+		}
 
+		function playNext() {
+			if (currentTileNumber < tilePattern.length) {
+				playThePattern(currentTileNumber++);
+			}
 		}
 
 		function voiceRecognition() {
@@ -111,10 +120,17 @@
 
 			recognition.onresult = function (event) {
 				console.log('You said: ', event.results[0][0].transcript);
-				if (event.results[0][0].transcript.toLowerCase() === "start game") {
+				if (event.results[0][0].transcript.toLowerCase() == 'start game' && gameStarted === false) {
+					gameStarted = true;
+					$('#exampleModalCenter').modal('show');
 					loadFn();
+					voiceRecognition();
 				}
-			}
+				else {
+					currentUserName = event.results[0][0].transcript;
+					$('#span_user_name').text(event.results[0][0].transcript);
+				}
+			};
 		}
 
 		function loadFn() {
@@ -133,6 +149,10 @@
 
 		function soundFn(audio_file) {
 			if (audio_file === 9) {
+				ismultiplayer = false;
+				document.getElementById("closeModal").click();
+				document.getElementById("Game_Tile").visibility = "visible";
+				prepareGame();
 				var msg = new SpeechSynthesisUtterance('You Chose Single Player');
 				window.speechSynthesis.speak(msg);
 				var msg = new SpeechSynthesisUtterance('You will listen to Tile Number along with its Music');
@@ -141,6 +161,10 @@
 				window.speechSynthesis.speak(msg);
 			}
 			else if (audio_file === 10) {
+				ismultiplayer = true;
+				document.getElementById("closeModal").click();
+				document.getElementById("Game_Tile").visibility = "visible";
+				prepareGame();
 				var msg = new SpeechSynthesisUtterance('You Chose Multi Player');
 				window.speechSynthesis.speak(msg);
 				var msg = new SpeechSynthesisUtterance('You will listen to Tile Number along with its Music');
@@ -151,6 +175,7 @@
 			else {
 				var audio = new Audio("sendAudio?userid=" + currentSessionId + "&gamesessionid=" + gameSessionId + "&tilenmber=" + audio_file);
 				audio.play();
+				return audio;
 			}
 		}
 
@@ -159,8 +184,7 @@
 </head>
 
 <body onload="voiceRecognition()">
-	<button onclick="prepareGame()">Start Game</button>
-	<div id="Game_Tile" style="display: none;">
+	<div id="Game_Tile" style="visibility: hidden;">
 		<div class="row">
 			<div class="col-3" style="left: 15px;top:15px;" onclick="soundFn(1);">
 				<div class="card tab-card">
@@ -238,28 +262,60 @@
 			</div>
 		</div>
 	</div>
-	<div id="Multi_Single">
+
+	<div id="start_game">
 		<div class="row">
-			<div class="col-md-6" style="left: 15px;top:15px;bottom:15px;">
-				<div class="card1 tab-card" onclick="soundFn(9);">
+			<div class="col-md-12" style="margin:15px;top:25px;margin-top: 0px;">
+				<div class="card2 tab-card">
 					<div class="tab-content" id="myTabContent">
 						<div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
-							<h6 class="card-title">Single Player</h6>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6" style="top:15px;bottom:15px;">
-				<div class="card1 tab-card" onclick="soundFn(10);">
-					<div class="tab-content" id="myTabContent">
-						<div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
-							<h6 class="card-title">Multi Player</h6>
+							<h2 class="card-title">Start Game</h2>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	 aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Enter Your Name : <span id="span_user_name"></span></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="Multi_Single">
+						<div class="row">
+							<div class="col-md-6" style="left: 15px;top:15px;bottom:15px;">
+								<div class="card1 tab-card" onclick="soundFn(9);">
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+											<h6 class="card-title">Single Player</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6" style="top:15px;bottom:15px;">
+								<div class="card1 tab-card" onclick="soundFn(10);">
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+											<h6 class="card-title">Multi Player</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>
