@@ -1,7 +1,9 @@
 package com.hackalogist.notifier;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.OnClose;
@@ -13,17 +15,19 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackalogist.commons.Constants;
 import com.hackalogist.model.MessageModel;
 
 @ServerEndpoint(value = "/ServerEndPoint")
 public class ServerEndPoint {
 
-public static Set<Session> users = new HashSet<Session>();
+private static final String CURRENT_SESSION_ID = "CURRENT_SESSION_ID";
+public static Map<String,Session> users = new HashMap<String,Session>();
 	
 	@OnOpen
 	public void handleOpen(Session userSession) {
 		System.out.println("INFO: Adding User: " + userSession.toString() + " to the queue at the server.");
-		users.add(userSession);
+		users.put(userSession.toString(),userSession);
 		ServerEndPoint.sendSessionIdToUser(userSession);
 		System.out.println("INFO: After Adding number of active users = " + users.size());
 	}
@@ -37,20 +41,12 @@ public static Set<Session> users = new HashSet<Session>();
 
 	@OnMessage
 	public void handleMessage(String message, Session userSession) {
-		try {
-			System.out.println("INFO: Notifying all the active users. JSON_Message: " + message);
-			for (Session eachUser : users) {
-				System.out.println("INFO: Notification sent from " + userSession + " to "+ eachUser);
-				eachUser.getBasicRemote().sendText(message);
-			}
-		} catch (IOException e) {
-			System.out.println("ERROR: Server cannot send notifications.");
-		}
+		
 	}
 	
 	public static void sendSessionIdToUser(Session userSession) {
 		MessageModel message = new MessageModel();
-		message.setKey("CURRENT_SESSION_ID");
+		message.setKey(Constants.CURRENT_SESSION_ID);
 		message.setValue(userSession.toString());
 		try {
 			userSession.getBasicRemote().sendText(ServerEndPoint.convertToJson(message));
@@ -63,8 +59,8 @@ public static Set<Session> users = new HashSet<Session>();
 		try {
 			String message = "";
 			if(message != null) {
-				for (Session eachUser : users) {
-					eachUser.getBasicRemote().sendText(message);
+				for (String eachUserString : users.keySet()) {
+					users.get(eachUserString).getBasicRemote().sendText(message);
 				}
 			}
 		} catch (IOException e) {

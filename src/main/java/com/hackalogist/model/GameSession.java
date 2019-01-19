@@ -1,18 +1,28 @@
 package com.hackalogist.model;
 
+import java.util.UUID;
+
 public class GameSession {
-	
-	private String gameId;
+
+	private UUID gameSessionId;
 	private String user1Name;
 	private String user2Name;
 	private int user1Score=0;
 	private int user2Score=0;
+	private String opponentName=null;
 	private int pattern[];
-
-	
-	public void setGameId(String gameId) {
-		this.gameId = gameId;
+ 
+	public GameSession() {
+		this.setGameSessionId(UUID.randomUUID());
 	}
+	
+	public GameSession(String userName1, String userName2) {
+		this.setGameSessionId(UUID.randomUUID());
+		this.user1Name = userName1;
+		this.user2Name = userName2;
+		this.opponentName = "";
+	}
+	
 	public void setUser1Name(String user1Name) {
 		this.user1Name = user1Name;
 	}
@@ -29,9 +39,6 @@ public class GameSession {
 		this.pattern = pattern;
 	}
 
-	public String getGameId() {
-		return gameId;
-	}
 	public String getUser1Name() {
 		return user1Name;
 	}
@@ -67,6 +74,22 @@ public class GameSession {
 		}
 		return true;
 		
+	}
+
+	public String getOpponentName() {
+		return opponentName;
+	}
+
+	public void setOpponentName(String opponentName) {
+		this.opponentName = opponentName;
+	}
+
+	public UUID getGameSessionId() {
+		return gameSessionId;
+	}
+
+	public void setGameSessionId(UUID gameSessionId) {
+		this.gameSessionId = gameSessionId;
 	}
 	
 }
