@@ -11,6 +11,10 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackalogist.model.MessageModel;
+
 @ServerEndpoint(value = "/ServerEndPoint")
 public class ServerEndPoint {
 
@@ -18,14 +22,15 @@ public static Set<Session> users = new HashSet<Session>();
 	
 	@OnOpen
 	public void handleOpen(Session userSession) {
-		System.out.println("INFO: Adding User: " + userSession + " to the queue at the server.");
+		System.out.println("INFO: Adding User: " + userSession.toString() + " to the queue at the server.");
 		users.add(userSession);
+		ServerEndPoint.sendSessionIdToUser(userSession);
 		System.out.println("INFO: After Adding number of active users = " + users.size());
 	}
 
 	@OnClose
 	public void handleClose(Session userSession) {
-		System.out.println("INFO: Removing User: " + userSession + " from the queue at the server.");
+		System.out.println("INFO: Removing User: " + userSession.toString() + " from the queue at the server.");
 		users.remove(userSession);
 		System.out.println("INFO: After removing number of active users = " + users.size());
 	}
@@ -43,10 +48,17 @@ public static Set<Session> users = new HashSet<Session>();
 		}
 	}
 	
-	@OnError
-	public void handleError() {
-		System.out.println("Socket");
+	public static void sendSessionIdToUser(Session userSession) {
+		MessageModel message = new MessageModel();
+		message.setKey("CURRENT_SESSION_ID");
+		message.setValue(userSession.toString());
+		try {
+			userSession.getBasicRemote().sendText(ServerEndPoint.convertToJson(message));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+	
 	public synchronized static void notifyAllUsers() {
 		try {
 			String message = "";
@@ -58,5 +70,15 @@ public static Set<Session> users = new HashSet<Session>();
 		} catch (IOException e) {
 			System.out.println("ERROR: Server cannot send notifications.");
 		}
+	}
+	
+	private static String convertToJson(MessageModel message) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(message);
+		} catch (JsonProcessingException e) {
+			System.out.println("ERROR: Notification message JSON Parsing Failed.");
+		}
+		return null;
 	}
 }
