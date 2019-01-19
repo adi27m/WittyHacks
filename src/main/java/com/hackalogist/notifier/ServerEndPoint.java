@@ -42,8 +42,7 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 	}
 
 	@OnMessage
-	public void handleMessage(String message, Session userSession) {
-		
+	public void handleMessage(String message, Session userSession) {		
 		Map<String, String> map = null;
 		try {
 			map = jsonToMap(message);
