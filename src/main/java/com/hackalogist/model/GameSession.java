@@ -1,16 +1,21 @@
 package com.hackalogist.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class GameSession {
 
 	private UUID gameSessionId;
 	private String user1Name;
+	private String user1Id;
 	private String user2Name;
+	private String user2Id;
 	private int user1Score=0;
 	private int user2Score=0;
 	private String opponentName=null;
 	private int pattern[];
+	private Map<Integer,String> tileToFileSoundMap = new HashMap<>();
  
 	public GameSession() {
 		this.setGameSessionId(UUID.randomUUID());
@@ -91,5 +96,35 @@ public class GameSession {
 	public void setGameSessionId(UUID gameSessionId) {
 		this.gameSessionId = gameSessionId;
 	}
+
+	public String getUser1Id() {
+		return user1Id;
+	}
+
+	public void setUser1Id(String user1Id) {
+		this.user1Id = user1Id;
+	}
+
+	public String getUser2Id() {
+		return user2Id;
+	}
+
+	public void setUser2Id(String user2Id) {
+		this.user2Id = user2Id;
+	}
+
+	public Map<Integer,String> getTileToFileSoundMap() {
+		return tileToFileSoundMap;
+	}
+
+	public void setTileToFileSoundMap(Map<Integer,String> tileToFileSoundMap) {
+		this.tileToFileSoundMap = tileToFileSoundMap;
+	}
+
+	public String gettileToFile(String tileNumber) {
+		return tileToFileSoundMap.get(tileNumber);
+	}
+	
+	
 	
 }
