@@ -3,10 +3,43 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Hackalogist</title>
-</head>
-<body>
-	<a href="home">Click</a>
-	<script type="text/javascript">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style type="text/css">
+    /***
+Bootstrap4 Card with Tabs by @mdeuerlein
+***/
+
+body {
+    background-color: #f7f8f9;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 34, 34, 0.1);
+    box-shadow: 2px 4px 10px 0 rgba(0, 34, 51, 0.05), 2px 4px 10px 0 rgba(0, 34, 51, 0.05);
+    border-radius: 0.15rem;
+    height: 45vh;
+    width: 47vh;  
+}
+
+.card1 {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 34, 34, 0.1);
+    box-shadow: 2px 4px 10px 0 rgba(0, 34, 51, 0.05), 2px 4px 10px 0 rgba(0, 34, 51, 0.05);
+    border-radius: 0.15rem;
+    height: 95vh;
+    width: 98vh;  
+}
+
+/* Tabs Card */
+
+.tab-card {
+  border:1px solid #eee;
+}
+  
+  </style>
+  <script type="text/javascript">
 		var websocket = new WebSocket("ws://localhost:8080/hackalogist/ServerEndPoint");
 		var currentSessionId;
 		websocket.onmessage = function processMessage(message) {
@@ -15,6 +48,153 @@
 				currentSessionId = jsonData.value;
 			}
 		}
+		function loadFn()
+    {
+      //Gaming Name
+      var msg = new SpeechSynthesisUtterance('Welcome to');
+      window.speechSynthesis.speak(msg);
+      var msg = new SpeechSynthesisUtterance('Do you want to play Single player or Multi Player?');
+      window.speechSynthesis.speak(msg);
+      var msg = new SpeechSynthesisUtterance('On the left side of screen there is option for Single Player');
+      window.speechSynthesis.speak(msg);
+      var msg = new SpeechSynthesisUtterance('And on the right side of screen, option for Multi Player');
+      window.speechSynthesis.speak(msg);
+      var msg = new SpeechSynthesisUtterance('Choose your side');
+      window.speechSynthesis.speak(msg);    
+    }
+
+    function soundFn(audio_file)
+    {
+      if(audio_file == 'Tile_9')
+      {
+        var msg = new SpeechSynthesisUtterance('You Chose Single Player');
+        window.speechSynthesis.speak(msg);
+
+        var msg = new SpeechSynthesisUtterance('You will listen to Tile Number along with its Music');
+        window.speechSynthesis.speak(msg);
+        var msg = new SpeechSynthesisUtterance('You will get two minutes to learn eight Music, and your time starts now');
+        window.speechSynthesis.speak(msg);
+      }
+      else if(audio_file == 'Tile_10')
+      {
+        var msg = new SpeechSynthesisUtterance('You Chose Multi Player');
+        window.speechSynthesis.speak(msg);
+
+        var msg = new SpeechSynthesisUtterance('You will listen to Tile Number along with its Music');
+        window.speechSynthesis.speak(msg);
+        var msg = new SpeechSynthesisUtterance('You will get two minutes to learn eight Music, and your time starts now');
+        window.speechSynthesis.speak(msg);
+      }
+      else
+      {
+        var audio = new Audio("sendAudio?path="+encodeURI(audio_file));
+        audio.play();
+      }
+    }
+
+
 	</script>
+</head>
+<body onload="loadFn();">
+<div id = "Game_Tile" style="display: none;">
+  <div class="row">
+    <div class="col-3"  style="left: 15px;top:15px;" onclick="soundFn('Tile 1');">
+      <div class="card tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 1</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" >
+      <div class="card tab-card" style="top: 15px" onclick="soundFn('Tile 2');">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 2</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" style="left: -15px;top:15px;" onclick="soundFn('Tile 3');">
+      <div class="card tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 3</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" style="left: -30px;top:15px;" onclick="soundFn('Tile 4');">
+      <div class="card tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 4</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3"  style="left: 15px;top:15px;" onclick="soundFn('Tile 5');">
+      <div class="card mt-3 tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 5</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" style="top:15px;" onclick="soundFn('Tile 6');">
+      <div class="card mt-3 tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 6</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" style="left: -15px;top:15px;" onclick="soundFn('Tile 7');">
+      <div class="card mt-3 tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 7</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3" style="left: -30px;top:15px;" onclick="soundFn('Tile 8');">
+      <div class="card mt-3 tab-card">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Tile 8</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="Multi_Single">
+  <div class="row">
+    <div class="col-md-6" style="left: 15px;top:15px;bottom:15px;" >
+      <div class="card1 tab-card" onclick="soundFn('Tile 9');">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Single Player</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6" style="top:15px;bottom:15px;">
+      <div class="card1 tab-card" onclick="soundFn('Tile 10');">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active p-3" id="one" role="tabpanel" aria-labelledby="one-tab">
+            <h6 class="card-title">Multi Player</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
 </body>
 </html>
