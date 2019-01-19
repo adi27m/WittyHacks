@@ -12,11 +12,10 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackalogist.commons.Constants;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackalogist.service.GameManagementService;
 
 @ServerEndpoint(value = "/ServerEndPoint")
@@ -37,13 +36,14 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 	@OnClose
 	public void handleClose(Session userSession) {
 		System.out.println("INFO: Removing User: " + userSession.toString() + " from the queue at the server.");
-		users.remove(userSession);
+		users.remove(userSession.toString());
 		System.out.println("INFO: After removing number of active users = " + users.size());
 	}
 
 	@OnMessage
-	public void handleMessage(String message, Session userSession) {		
-		Map<String, String> map = null;
+	public void handleMessage(String message, Session userSession) {
+		
+		Map<String, Object> map = null;
 		try {
 			map = jsonToMap(message);
 		} catch (JSONException e) {
@@ -52,9 +52,9 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 		gameManagementService.executeOperation(map,userSession.toString());
 	}
 	
-	private static Map<String, String> jsonToMap(String t) throws JSONException {
+	private static Map<String, Object> jsonToMap(String t) throws JSONException {
 
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, Object> map = new HashMap<String, Object>();
         JSONObject jObject = new JSONObject(t);
         Iterator<?> keys = jObject.keys();
 

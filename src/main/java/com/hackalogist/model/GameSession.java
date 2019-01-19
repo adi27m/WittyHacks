@@ -1,6 +1,7 @@
 package com.hackalogist.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,14 +12,16 @@ public class GameSession {
 	private String user1Id;
 	private String user2Name;
 	private String user2Id;
-	private int user1Score=0;
-	private int user2Score=0;
+	private int user1Score;
+	private int user2Score;
 	private String opponentName=null;
-	private int pattern[];
+	private List<Integer> pattern;
 	private Map<Integer,String> tileToFileSoundMap = new HashMap<>();
  
 	public GameSession() {
 		this.setGameSessionId(UUID.randomUUID());
+		user1Score = 0;
+		user2Score = 0;
 	}
 	
 	public GameSession(String userName1, String userName2) {
@@ -40,7 +43,7 @@ public class GameSession {
 	public void setUser2Score(int user2Score) {
 		this.user2Score = user2Score;
 	}
-	public void setPattern(int[] pattern) {
+	public void setPattern(List<Integer> pattern) {
 		this.pattern = pattern;
 	}
 
@@ -56,7 +59,7 @@ public class GameSession {
 	public int getUser2Score() {
 		return user2Score;
 	}
-	public int[] getPattern() {
+	public List<Integer> getPattern() {
 		return pattern;
 	}
 
@@ -70,9 +73,9 @@ public class GameSession {
 	
 	public boolean ValidatePattern(int[] userPattern)
 	{
-		for(int i=0;i<pattern.length;i++)
+		for(int i=0;i<pattern.size();i++)
 		{
-			if(pattern[i]!=userPattern[i])
+			if(pattern.get(i)!=userPattern[i])
 			{
 				return false;
 			}
