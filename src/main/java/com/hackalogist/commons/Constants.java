@@ -13,6 +13,9 @@ public class Constants {
 	public static final String RESULT_PATTERN = "resultpattern";
 	public static final String ATTEMPT = "attempt";
 	public static final String COMMAND_NAME = "commandname";
+	public static final String PREPAREGAME = "preparegame";
+	public static final String STARTGAME = "startgame";
+	public static final String CHECKRESPONSE = "checkresponse";
 	
 	
 	

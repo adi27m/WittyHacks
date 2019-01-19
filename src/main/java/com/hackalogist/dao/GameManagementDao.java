@@ -36,6 +36,7 @@ public class GameManagementDao {
 	}
 
 	public void prepareGame(Map<String, Object> map, String userId) {
+		System.out.println("i am inside");
 		boolean isMultiplayer = Boolean.parseBoolean((String)map.get(Constants.IS_MULTIPLAYER));
 		int numberOfTiles = Integer.parseInt((String)map.get(Constants.NUMBER_OF_TILES));
 		//String difficulty = map.get(Constants.DIFFICULTY);

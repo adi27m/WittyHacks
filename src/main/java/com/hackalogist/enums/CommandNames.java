@@ -1,4 +1,4 @@
-package com.hackalogist.enums;
+/*package com.hackalogist.enums;
 
 public enum CommandNames {
 	
@@ -17,3 +17,4 @@ public enum CommandNames {
 		return value;
 	}
 }
+*/

@@ -36,7 +36,10 @@
 		}
 	</style>
 	<script type="text/javascript">
-		const websocket = new WebSocket("ws://localhost:8080/hackalogist/ServerEndPoint");
+		let websocket = null;
+		if (websocket === null || websocket === undefined) {
+			websocket = new WebSocket("ws://localhost:8080/hackalogist/ServerEndPoint");
+		} 
 		const COMMAND_NAME = "commandname";
 		const NO_OF_TILES = 8;
 		let gameStarted = false;
@@ -65,7 +68,7 @@
 		}
 
 		function sendCommandToServer(json) {
-			websocket.send(json);
+			websocket.send(JSON.stringify(json));
 		}
 
 		function prepareGame() {
@@ -178,12 +181,16 @@
 				return audio;
 			}
 		}
-
+		function openModal() {
+			$('#exampleModalCenter').modal('show');
+			prepareGame();
+		}
 
 	</script>
 </head>
 
 <body onload="voiceRecognition()">
+	<button onclick="openModal()">Click</button>
 	<div id="Game_Tile" style="visibility: hidden;">
 		<div class="row">
 			<div class="col-3" style="left: 15px;top:15px;" onclick="soundFn(1);">

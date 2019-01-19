@@ -1,5 +1,6 @@
 package com.hackalogist.notifier;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -32,12 +34,12 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 		System.out.println("INFO: Adding User: " + userSession.toString() + " to the queue at the server.");
 		users.put(userSession.toString(),userSession);
 		HashMap< String , List<String>> responseMap=new HashMap<>();
-		List<String> users=new LinkedList<>();
-		users.add(userSession.toString());
+		List<String> usersList=new LinkedList<>();
+		usersList.add(userSession.toString());
 		List<String> commands=new LinkedList<>();
 		commands.add( Constants.CURRENT_SESSION_ID);
 		responseMap.put(Constants.COMMAND_NAME,commands);
-		responseMap.put(Constants.USER_ID, users);
+		responseMap.put(Constants.USER_ID, usersList);
 		ServerEndPoint.sendResponse(userSession.toString(),responseMap);
 		System.out.println("INFO: After Adding number of active users = " + users.size());
 	}
@@ -55,10 +57,36 @@ public static Map<String,Session> users = new HashMap<String,Session>();
 		Map<String, Object> map = null;
 		try {
 			map = jsonToMap(message);
+			gameManagementService.executeOperation(map,userSession.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		gameManagementService.executeOperation(map,userSession.toString());
+	}
+	
+	@OnError
+	public void handleError(Throwable t) {
+		// Most likely cause is a user closing their browser. Check to see if
+	    // the root cause is EOF and if it is ignore it.
+	    // Protect against infinite loops.
+	    int count = 0;
+	    Throwable root = t;
+	    while (root.getCause() != null && count < 20) {
+	        root = root.getCause();
+	        count ++;
+	    }
+	    if (root instanceof EOFException) {
+	        // Assume this is triggered by the user closing their browser and
+	        // ignore it.
+	    } else {
+	        try {
+				throw t;
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	}
 	
 	private static Map<String, Object> jsonToMap(String t) throws JSONException {

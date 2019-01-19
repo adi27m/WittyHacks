@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.hackalogist.commons.Constants;
 import com.hackalogist.dao.GameManagementDao;
-import com.hackalogist.enums.CommandNames;
 
 @Service
 public class GameManagementService {
@@ -23,16 +22,21 @@ public class GameManagementService {
 		public void executeOperation(Map<String, Object> map, String userId) {
 			String commandNameString = (String)map.get(Constants.COMMAND_NAME);
 			if(null != commandNameString) {
-				CommandNames commandName = CommandNames.valueOf(commandNameString);
-				switch(commandName) {
-				case STARTGAME:
+				switch(commandNameString) {
+				case Constants.STARTGAME:
 					gameManagementDao.startGame(map,userId);
 					break;
-				case CHECKRESPONSE:
+				case Constants.CHECKRESPONSE:
 					gameManagementDao.checkResponse(map,userId);
 					break;
-				case PREPAREGAME:
-					gameManagementDao.prepareGame(map,userId);
+				case Constants.PREPAREGAME:
+					try {
+						gameManagementDao.prepareGame(map,userId);
+					} catch (Exception e) {
+						gameManagementDao.prepareGame(map,userId);
+						System.out.println("i am here");
+						e.printStackTrace();
+					}
 					break;
 				}
 			}
