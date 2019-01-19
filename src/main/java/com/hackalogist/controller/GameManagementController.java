@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,24 +23,11 @@ public class GameManagementController {
 	@Autowired
 	GameManagementService gameManegementService;
 	
-	@RequestMapping("/home")
-	public String ValidateUserResponse() {
-		return "Correct";
-	}
-
-	@PostMapping("/startGame")
-	public void startGame(@RequestParam("usersessionid") String userSessionid, @RequestParam("nooftiles") int noOfTiles,
-			@RequestParam("ismultiplayer") boolean isMultiPlayer, @RequestParam("gamelevel") String gameLevel) {
-		
-		if (isMultiPlayer) {
-			this.gameManegementService.requestGameSession(userSessionid, isMultiPlayer);
-		} else {
-			
-		}
-	}
-
 	@GetMapping("/sendAudio")
-	public void getImage(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
+	public void getAudio(@RequestParam("usersessionid") String userSessionid, @RequestParam("tilenumber") String tileNumber,@RequestParam("gamesessionid") String gameSessionId, HttpServletRequest request, HttpServletResponse response) {
+		
+		String path=this.gameManegementService.requestFileForTile(userSessionid, gameSessionId,tileNumber);
+		
 		try (ServletOutputStream output = response.getOutputStream(); FileInputStream fis = new FileInputStream(path)) {
 			byte b[] = new byte[(int) new File(path).length()];
 			fis.read(b);
